@@ -14,7 +14,7 @@ var formatter = d3.format(",.1f"),
     formatter2 = d3.format(",.f");
 
 var calenderScale = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"])
+                      .domain(["Январь", "Февраль"])
                       .rangePoints([30, width - 30]);
             
 var months = d3.scale.ordinal()
@@ -70,11 +70,11 @@ var slider = d3.slider().min(0).max(width).step(width / (calenderScale.domain().
 d3.select("#slider").call(slider.value(width));
 
 d3.json("data/rajony.geojson", function(karta) {
-  d3.csv("data/regiony.csv", function(data) {
+  d3.csv("data/regiony_16.csv", function(data) {
     d3.csv("data/goroda.csv", function(goroda) {
     
     
-    d3.csv("data/vidy.csv", function(groups) {
+    d3.csv("data/vidy_16.csv", function(groups) {
 
     // Таблица
         groups = groups;
@@ -85,28 +85,28 @@ d3.json("data/rajony.geojson", function(karta) {
         
         var table = d3.select("#table");
         var thead = table.append("thead")
-			.style("background-color", 'rgb(254,204,92)')
-			.style("color", "black");
+            .style("background-color", 'rgb(254,204,92)')
+            .style("color", "black");
         tbody = table.append("tbody");
         
         thead.append("tr").selectAll("th")
-	    .data(["Вид", "Зарплата, руб."])
-	    .enter().append("td")
-	    .text(function(d) { return d; });
+        .data(["Вид", "Зарплата, руб."])
+        .enter().append("td")
+        .text(function(d) { return d; });
         
         tr = tbody.selectAll("tr")
-		.data(tableSelected)
+        .data(tableSelected)
     
         tr.enter().append("tr").style('background-color', function (d, i) { return i%2 ? 'white' : 'rgb(255,255,178)'; });;
 
         
         var tds = tr.selectAll("td");
-	tds.data(function(d) { var alist = []; alist.push(d.subgroup.toUpperCase(), formatter2(d.amount)); return alist }).enter().append("td").text(function(d) { return d; });
+    tds.data(function(d) { var alist = []; alist.push(d.subgroup.toUpperCase(), formatter2(d.amount)); return alist }).enter().append("td").text(function(d) { return d; });
 
 
-	var selection = data.filter(selectData).sort(function(a, b) {
-	return d3.ascending(parseInt(a.amount), parseInt(b.amount))});
-	selected = selection;
+    var selection = data.filter(selectData).sort(function(a, b) {
+    return d3.ascending(parseInt(a.amount), parseInt(b.amount))});
+    selected = selection;
    
     var svodka = d3.select("#svodka").append("svg").attr({width: width, height: 340});
     var svodkaSelection = selection.filter(selectSvodka)
@@ -124,10 +124,10 @@ d3.json("data/rajony.geojson", function(karta) {
     .domain(d3.range(svodkaSelection.length))
         .rangeRoundBands([height / 2, 0], .2);
         
-	xScale = d3.scale.linear()
-				.domain([0,
+    xScale = d3.scale.linear()
+                .domain([0,
                       d3.max(svodkaSelection, function(d) { return d.amount; })])
-                      .range([0, 400]);
+                      .range([0, 480]);
     
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
     var yAxis = d3.svg.axis().scale(yScale).orient("left")
@@ -236,7 +236,7 @@ d3.json("data/rajony.geojson", function(karta) {
       
     slider.on("slide", function(evt, value) {
 
-	month = Math.round(value / stepper);
+    month = Math.round(value / stepper);
                 selection = data.filter(selectData).sort(function(a, b) { 
         return d3.ascending(parseInt(a.amount), parseInt(b.amount))})
 
@@ -356,23 +356,24 @@ d3.json("data/rajony.geojson", function(karta) {
                    var tableSelection = groups.filter(function(d) { if ((d.period == month) && (d.subgroup != "Всего")) { return d; }; } );
             
 
-            tableSelected = tableSelection.sort(function(a, b) { return d3.descending(parseInt(a['amount']), parseInt(b['amount'])); }).slice(0, 10);
-	    
-	    var newTableSelection = [];
-	    for (var i = 0; i < tableSelected.length; i++) {
-		newTableSelection.push([tableSelected[i].subgroup, tableSelected[i].amount]);
-	    };
-	    tr.data(tableSelected);
-	    tr.selectAll("td").data(function(d) { var alist = []; alist.push(d.subgroup.toUpperCase(), formatter2(d.amount)); return alist })
-		    .transition()
-		    .duration(500)
-		    .text(function(d) { return d; });
+            tableSelected = tableSelection.sort(function(a, b) {
+				return d3.descending(parseInt(a['amount']), parseInt(b['amount'])); }).slice(0, 10);
+        
+        var newTableSelection = [];
+        for (var i = 0; i < tableSelected.length; i++) {
+        newTableSelection.push([tableSelected[i].subgroup, tableSelected[i].amount]);
+        };
+        tr.data(tableSelected);
+        tr.selectAll("td").data(function(d) { var alist = []; alist.push(d.subgroup.toUpperCase(), formatter2(d.amount)); return alist })
+            .transition()
+            .duration(500)
+            .text(function(d) { return d; });
 
-	    setTableMonth(month);
+        setTableMonth(month);
   
   });
   
-		var cities = svg_map.selectAll("circle")
+        var cities = svg_map.selectAll("circle")
                           .data(goroda);
                     
                     
