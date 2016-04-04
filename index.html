@@ -5,6 +5,7 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/styles.css">
         <link rel="stylesheet" href="css/d3.slider.css">
+<!-- [if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![end if] -->
 <!-- Yandex.Metrika counter -->
         <script type="text/javascript">
         (function (d, w, c) {
@@ -29,31 +30,38 @@
         })(document, window, "yandex_metrika_callbacks");
         </script>
         <noscript><div><img src="//mc.yandex.ru/watch/30644627" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-
 <!-- /Yandex.Metrika counter -->
     </head>
 <body>
-    <div id="logo">
-        <a href="/"><img src="img/logo.jpg" /></a>
-    </div>
-    <article>
+	<header>
+        <a href="/"><img src="img/logo.jpg" alt="Зарплаты Беларуси. Проект сообщества 'Открытые данные для Беларуси'"/></a>
+	</header>
+    <main>
     <h1>Мониторинг заработных плат в Беларуси</h1>
-    <div class="text">
+    <article class="text">
     <p>Информационное приложение "Зарплаты Беларуси" показывает статистику номинальной начисленной среднемесячной заработной платы в Республике Беларусь и позволяет быстро оценить ситуацию с основными доходами населения, а также провести элементарный анализ данных о зарплате в региональном разрезе, в помесячной динамике и по отдельным видам деятельности.</p>
     
     <p>График с обзорными данными дает общее представление о средней зарплате по всей стране, по отдельным регионам и дополнительно показывает минимальное и максимальное значение средней зарплаты в соотв. месяце (поэтому возможны повторы).</p>
     <p>Под графиком находится красный бегунок, потянув за который можно задать другой месяц. Все данные указаны в тысячах белорусских рублей: </p>
-    </div>
+    </article>
     <div id="tooltip" class="hidden"><p id="rajon"></p><p id="amount"></p></div>
+   <h2>Заработная плата в регионах в <span id="tablemonth"></span> 2016
+года:</h2> 
+    <section id="regions">
     <div id="svodka"></div>
+    <div id="map"></div>
+    </section>
+    
+    <section id="sliderScale">
     <div id="slider"></div>
     <div id="scale"></div>
-    <div id="map"></div>
-    <h2>10 самых денежных видов деятельности в <span id="tablemonth"></span> 2016 г.</h2>
-    <div id="table"></div>
-        <div class="text"><p><img src="img/csv.png"> Подробный анализ этих данных можно провести на сайте "Открытые данные для Беларуси" в разделе <a href="http://opendata.by/dataset/78">Заработная плата</a>.</p></div>
+    </section>
 
-<div id= "impressum" class="text">
+    <h2>Заработная плата по отдельным видам деятельности:</h2>
+    <section id="table"></section>
+    <section class="text"><p><img src="img/csv.png"> Подробный анализ этих данных можно провести на сайте "Открытые данные для Беларуси" в разделе <a href="http://opendata.by/dataset/78">Заработная плата</a>.</p></section>
+
+<section id= "impressum" class="text">
       <p>Приложение создано в рамках проекта dataШкола сообщества "<a href="http://opendata.by">Открытые данные для Беларуси</a>", работает на основе официальных данных Национального статистического комитета Республики Беларусь и обновляется ежемесячно по мере публикации новых данных.</p>
       
       <p><b>Упоминания в СМИ:</b></p>
@@ -70,8 +78,8 @@
           </ul>
           <p>Редактор приложения Алексей Медвецкий, am@opendata.by.</p>
           <div id="tibo"><a href="http://www.tc.by/exhibitions/tibo/ip2016/"><img src="http://www.tc.by/i/photo/ip.jpg"></a></div>
-    </div>
-    </article>
+    </section>
+    </main>
     <footer>
       <script src="js/d3.v3.min.js"></script>
       <script src="js/d3.slider.js"></script>
