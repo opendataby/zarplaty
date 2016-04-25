@@ -6,23 +6,27 @@ var height = 600;
 var svg_map = d3.select("#map").append("svg").attr({width: 400, height:
 height / 1.8});
 var projection = d3.geo.mercator().center([27.9, 53.7]).scale(2000)
-                    .translate([165, 150]);
+                    .translate([220, 150]);
 var path = d3.geo.path().projection(projection);
 var color = d3.scale.quantize()
-              .range(['rgb(255,255,178)','rgb(254,204,92)','rgb(253,141,60)','rgb(227,26,28)']);
+              .range(['rgb(255,255,178)','rgb(254,204,92)','rgb(253,141,60)',
+			  			'rgb(227,26,28)']);
 var formatter = d3.format(",.1f"),
     formatter2 = d3.format(",.f");
 
 var calenderScale = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль"])
+                      .domain(["Январь", "Февраль", "Март"])
                       .rangePoints([30, 1024 - 30]);
             
 var months = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
-                        "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"])
+                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май",
+					  			"Июнь", "Июль", "Август", "Сентябрь", "Октябрь",
+								"Ноябрь", "Декабрь"])
                       .rangeRoundBands([11]);
 function setTableMonth(d) {
-    var tableMonths = ["январе", "феврале", "марте", "апреле", "мае", "июне", "июле", "августе", "сентябре", "октябре", "ноябре", "декабре"];
+    var tableMonths = ["январе", "феврале", "марте", "апреле", "мае", "июне",
+						"июле", "августе", "сентябре", "октябре", "ноябре",
+						"декабре"];
     d3.select("#tablemonth").text(tableMonths[d]);
 }
                       
@@ -84,7 +88,7 @@ d3.json("data/rajony.geojson", function(karta) {
 			});
 	console.log(tableSelection.slice(0, 10));
         tableSelection.sort(function(a, b) {
-			return d3.descending(parseInt(a['amount']), parseInt(b['amount']));
+			return d3.descending(parseFloat(a['amount']), parseFloat(b['amount']));
 			})
 	console.log(tableSelection.slice(0, 10));
         
@@ -111,7 +115,7 @@ d3.json("data/rajony.geojson", function(karta) {
 
 
     var selection = data.filter(selectData).sort(function(a, b) {
-    return d3.ascending(parseInt(a.amount), parseInt(b.amount))});
+    return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});
     selected = selection;
    
     var svodka = d3.select("#svodka").append("svg").attr({width: 600,
@@ -125,7 +129,7 @@ height: height / 1.8});
     svodkaSelection.push(min, max);
     
     svodkaSelection.sort(function(a, b) {
-    return d3.ascending(parseInt(a.amount), parseInt(b.amount))});;
+    return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});;
     
     var yScale = d3.scale.ordinal()
     .domain(d3.range(svodkaSelection.length))
@@ -133,7 +137,7 @@ height: height / 1.8});
         
     xScale = d3.scale.linear()
                 .domain([0,
-                      d3.max(svodkaSelection, function(d) { return d.amount; })])
+                      d3.max(svodkaSelection, function(d) { return parseFloat(d.amount); })])
                       .range([0, 280]);
     
     var xAxis = d3.svg.axis().scale(xScale).orient("bottom").ticks(5);
@@ -157,7 +161,7 @@ height: height / 1.8});
     svodka.selectAll("rect").data(svodkaSelection).enter().append("rect").attr({
     x: 180,
     y: function(d, i) {return yScale(i)},
-    width: function(d) {return xScale(d.amount)},
+    width: function(d) {return xScale(parseFloat(d.amount))},
     height: yScale.rangeBand(),
     fill: function(d) { if ((d.max) || (d.min)) { return 'rgb(227,26,28)'; } else { return "rgb(253,141,60)" } },
     })
@@ -174,8 +178,8 @@ height: height / 1.8});
     
     svodka.append("g").attr("class", "minMax axis").attr("transform", "translate(470, 0)").call(minMaxAxis); 
 
-    color.domain([d3.min(selection, function(d) { return parseInt(d.amount) }),
-                  d3.max(selection, function(d) { return parseInt(d.amount) })]);
+    color.domain([d3.min(selection, function(d) { return parseFloat(d.amount) }),
+                  d3.max(selection, function(d) { return parseFloat(d.amount) })]);
     
     for (var i = 0; i < selection.length; i++ ) {
       for (var j = 0; j < karta.features.length; j++) {
@@ -193,7 +197,7 @@ height: height / 1.8});
       .append("path")
       .attr("d", path)
       .attr("fill", function(d) { if (d.properties.amount) {
-                                    return color(parseInt(d.properties.amount));
+                                    return color(parseFloat(d.properties.amount));
                                   } else {
                                     return "black"
                                     }
@@ -218,12 +222,12 @@ height: height / 1.8});
       // Легенда
       var legend = svg_map.append("g")
             .attr("id", "legend")
-            .attr("transform", "translate(10, 10)");
+            .attr("transform", "translate(40, 10)");
       legend.selectAll("rect")
             .data(color.range())
             .enter()
             .append("rect")
-            .attr({ x: 5,
+            .attr({ x: 30,
                     y: function(d, i) { return i * 15; },
                     width: 10,
                     height: 10,
@@ -236,7 +240,7 @@ height: height / 1.8});
             .append("text")
             .text(function(d) { return "<" + " " + formatter(d3.max(color.invertExtent(d), function(d) { return d; })); })
             .attr({
-                x: 20,
+                x: 45,
                 y: function(d, i) { return (i * 15) + 10; }
             });
       
@@ -244,7 +248,7 @@ height: height / 1.8});
 
     month = Math.round(value / stepper);
                 selection = data.filter(selectData).sort(function(a, b) { 
-        return d3.descending(parseInt(a.amount), parseInt(b.amount))})
+        return d3.descending(parseFloat(a.amount), parseFloat(b.amount))})
 
             svodkaSelection = selection.filter(selectSvodka)
             var min = selection[0], max = selection[selection.length - 1];
@@ -252,16 +256,16 @@ height: height / 1.8});
             min.min = "min";
             svodkaSelection.push(min, max);
             svodkaSelection.sort(function(a, b) {
-            return d3.ascending(parseInt(a.amount), parseInt(b.amount))});;
+            return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});;
             
             yScale.domain(d3.range(svodkaSelection.length));
             
-          xScale.domain([0, d3.max(svodkaSelection, function(d) { return d.amount; })]);
+          xScale.domain([0, d3.max(svodkaSelection, function(d) { return parseFloat(d.amount); })]);
 
             svodka.selectAll("rect").data(svodkaSelection).transition().duration(500).attr({
             x: 180,
             y: function(d, i) {return yScale(i)},
-            width: function(d) {return xScale(d.amount)},
+            width: function(d) {return xScale(parseFloat(d.amount))},
             height: yScale.rangeBand(),
             fill: function(d) { if ((d.max) || (d.min)) { return 'rgb(227,26,28)'; } else { return 'rgb(253,141,60)' } },
             title: function(d) { return d.amount; }
@@ -269,7 +273,7 @@ height: height / 1.8});
             svodka.selectAll("text").data(svodkaSelection).transition().duration(500)
             .text(function(d) {return d.amount})
             .attr({
-                x: function(d) {return xScale(d.amount) + 110; },
+                x: function(d) {return xScale(parseFloat(d.amount)) + 110; },
                 y: function(d, i) {return yScale(i) + yScale.rangeBand() / 2 + 5},
                 fill: "white" 
                 });
@@ -277,8 +281,8 @@ height: height / 1.8});
             svodka.select(".y.axis").transition().duration(500).call(yAxis);
             svodka.select(".x.axis").transition().duration(500).call(xAxis); 
               
-            color.domain([d3.min(selection, function(d) { return parseInt(d.amount) }),
-                          d3.max(selection, function(d) { return parseInt(d.amount) })]);
+            color.domain([d3.min(selection, function(d) { return parseFloat(d.amount) }),
+                          d3.max(selection, function(d) { return parseFloat(d.amount) })]);
                 
                 for (var i = 0; i < selection.length; i++ ) {
                   for (var j = 0; j < karta.features.length; j++) {
@@ -294,7 +298,7 @@ height: height / 1.8});
                   .transition()
                   .duration(500)
                   .attr("fill", function(d) { if (d.properties.amount) {
-                                                return color(parseInt(d.properties.amount));
+                                                return color(parseFloat(d.properties.amount));
                                               } else {
                                                 return "black"
                                                 }
@@ -326,7 +330,7 @@ height: height / 1.8});
                               var colorCircle;
                                         for (var q = 0; q < selection.length; q++) {
                                           if (d.city == selection[q].rajon) {
-                                              colorCircle = color(parseInt(selection[q].amount));
+                                              colorCircle = color(parseFloat(selection[q].amount));
                                               d.amount = selection[q].amount;
                                             } else {
                                               continue;
@@ -363,7 +367,7 @@ height: height / 1.8});
             
 
             tableSelected = tableSelection.sort(function(a, b) {
-				return d3.descending(parseInt(a['amount']), parseInt(b['amount'])); }).slice(0, 10);
+				return d3.descending(parseFloat(a['amount']), parseFloat(b['amount'])); }).slice(0, 10);
         
         var newTableSelection = [];
         for (var i = 0; i < tableSelected.length; i++) {
