@@ -15,7 +15,7 @@ var formatter = d3.format(",.1f"),
     formatter2 = d3.format(",.f");
 
 var calenderScale = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль", "Март"])
+                      .domain(["Январь", "Февраль", "Март", "Апрель"])
                       .rangePoints([30, 1024 - 30]);
             
 var months = d3.scale.ordinal()
@@ -86,13 +86,11 @@ d3.json("data/rajony.geojson", function(karta) {
         tableSelection = groups.filter(function(d) {
 			return d.period == month && d.subgroup != "Всего";
 			});
-	console.log(tableSelection.slice(0, 10));
+
         tableSelection.sort(function(a, b) {
 			return d3.descending(parseFloat(a['amount']), parseFloat(b['amount']));
 			})
-	console.log(tableSelection.slice(0, 10));
-        
-        
+
         var table = d3.select("#table");
         var thead = table.append("thead")
             .style("background-color", 'rgb(254,204,92)')
@@ -157,14 +155,14 @@ height: height / 1.8});
                         return values[d];
                           });
 
-        
     svodka.selectAll("rect").data(svodkaSelection).enter().append("rect").attr({
     x: 180,
     y: function(d, i) {return yScale(i)},
     width: function(d) {return xScale(parseFloat(d.amount))},
     height: yScale.rangeBand(),
     fill: function(d) { if ((d.max) || (d.min)) { return 'rgb(227,26,28)'; } else { return "rgb(253,141,60)" } },
-    })
+    });
+    
     svodka.selectAll("text").data(svodkaSelection).enter().append("text")
     .text(function(d) {return d.amount})
     .attr({
@@ -189,7 +187,6 @@ height: height / 1.8});
         }
       }
     };
-    
     
     svg_map.selectAll("path")
       .data(karta.features)
@@ -303,7 +300,6 @@ height: height / 1.8});
                                                 return "black"
                                                 }
                                               });
-            
             svg_map.selectAll("path")
                   .data(karta.features)
               .on("mouseover", function(d) {
@@ -364,7 +360,6 @@ height: height / 1.8});
                     .text(function(d) { return "<" + " " + formatter(d3.max(color.invertExtent(d), function(d) { return d; })); });
             
                    var tableSelection = groups.filter(function(d) { if ((d.period == month) && (d.subgroup != "Всего")) { return d; }; } );
-            
 
             tableSelected = tableSelection.sort(function(a, b) {
 				return d3.descending(parseFloat(a['amount']), parseFloat(b['amount'])); }).slice(0, 10);

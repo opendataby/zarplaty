@@ -4,11 +4,14 @@ body {
   font-size: 14px;
   font-family: sans-serif;
 }
-
-header {
+header, footer {
     background-color: #2A2F4E;
 }
-
+header #vk {
+    float: right;
+    padding: 4px 6px;
+    margin: 4px 6px;
+}
 #regions div {
   float: left;
 }
@@ -97,5 +100,16 @@ th, td {
   margin: 0;
   font-size: 10px;
 }
-
+footer p {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 30px;
+    font-size: .8em;
+    color: white;
+    margin: 0 auto;
+}
+footer a {
+    color: white;
+    margin: 0 auto;
+}
 
