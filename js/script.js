@@ -3,8 +3,12 @@ var selected;
 var groupsSelection, tbody;
 var groups;
 var height = 600;
-var svg_map = d3.select("#map").append("svg").attr({width: 400, height:
-height / 1.8});
+var svg_map = d3.select("#map")
+				.append("svg")
+				.attr({
+					width: 400,
+					height: height / 1.8
+					});
 var projection = d3.geo.mercator().center([27.9, 53.7]).scale(2000)
                     .translate([220, 150]);
 var path = d3.geo.path().projection(projection);
@@ -109,15 +113,26 @@ d3.json("data/rajony.geojson", function(karta) {
 
         
         var tds = tr.selectAll("td");
-    tds.data(function(d) { var alist = []; alist.push(d.subgroup.toUpperCase(), formatter2(d.amount)); return alist }).enter().append("td").text(function(d) { return d; });
+    tds.data(function(d) {
+		var alist = [];
+		alist.push(d.subgroup.toUpperCase(), formatter2(d.amount));
+		return alist
+		})
+		.enter()
+		.append("td")
+		.text(function(d) { return d; });
 
 
     var selection = data.filter(selectData).sort(function(a, b) {
     return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});
     selected = selection;
    
-    var svodka = d3.select("#svodka").append("svg").attr({width: 600,
-height: height / 1.8});
+    var svodka = d3.select("#svodka")
+					.append("svg")
+					.attr({
+						width: 600,
+						height: height / 1.8
+						});
     var svodkaSelection = selection.filter(selectSvodka)
     
     
@@ -375,12 +390,10 @@ height: height / 1.8});
             .text(function(d) { return d; });
 
         setTableMonth(month);
-  
   });
   
         var cities = svg_map.selectAll("circle")
                           .data(goroda);
-                    
                     
                     cities.enter()
                        .append("circle")
