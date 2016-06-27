@@ -1,5 +1,5 @@
 var tr;
-var selected;
+
 var groupsSelection, tbody;
 var groups;
 var height = 600;
@@ -19,7 +19,7 @@ var formatter = d3.format(",.1f"),
     formatter2 = d3.format(",.f");
 
 var calenderScale = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль", "Март", "Апрель"])
+                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май"])
                       .rangePoints([30, 1024 - 30]);
             
 var months = d3.scale.ordinal()
@@ -81,7 +81,7 @@ d3.json("data/rajony.geojson", function(karta) {
   d3.csv("data/regiony_16.csv", function(data) {
     d3.csv("data/goroda.csv", function(goroda) {
     
-    
+    console.log(data);
     d3.csv("data/vidy_16.csv", function(groups) {
 
     // Таблица
@@ -125,7 +125,9 @@ d3.json("data/rajony.geojson", function(karta) {
 
     var selection = data.filter(selectData).sort(function(a, b) {
     return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});
-    selected = selection;
+
+    
+    console.log(selection);
    
     var svodka = d3.select("#svodka")
 					.append("svg")
