@@ -81,7 +81,6 @@ d3.json("data/rajony.geojson", function(karta) {
   d3.csv("data/regiony_16.csv", function(data) {
     d3.csv("data/goroda.csv", function(goroda) {
     
-    console.log(data);
     d3.csv("data/vidy_16.csv", function(groups) {
 
     // Таблица
@@ -125,9 +124,6 @@ d3.json("data/rajony.geojson", function(karta) {
 
     var selection = data.filter(selectData).sort(function(a, b) {
     return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});
-
-    
-    console.log(selection);
    
     var svodka = d3.select("#svodka")
 					.append("svg")
