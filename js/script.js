@@ -19,7 +19,7 @@ var formatter = d3.format(",.1f"),
     formatter2 = d3.format(",.f");
 
 var calenderScale = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август"])
+                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь"])
                       .rangePoints([30, 1024 - 30]);
             
 var months = d3.scale.ordinal()
