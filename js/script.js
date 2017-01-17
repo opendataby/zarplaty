@@ -19,7 +19,7 @@ var formatter = d3.format(",.1f"),
     formatter2 = d3.format(",.f");
 
 var calenderScale = d3.scale.ordinal()
-                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь"])
+                      .domain(["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь"])
                       .rangePoints([30, 1024 - 30]);
             
 var months = d3.scale.ordinal()
@@ -51,7 +51,7 @@ d3.select("#scale").append("svg")
       .attr("transform", "translate(0, 3)")
       .call(sliderAxis);
 
-var stepper = 994 / (calenderScale.domain().length - 1);
+var stepper = 964 / (calenderScale.domain().length - 1);
 
 
 function selectData(datum) {
@@ -74,8 +74,8 @@ setTableMonth(month);
 
 var xScale;
 
-var slider = d3.slider().min(0).max(994).step(994 / (calenderScale.domain().length - 1));
-d3.select("#slider").call(slider.value(994));
+var slider = d3.slider().min(0).max(994).step(964 / (calenderScale.domain().length - 1));
+d3.select("#slider").call(slider.value(964));
 
 d3.json("data/rajony.geojson", function(karta) {
   d3.csv("data/regiony_16.csv", function(data) {
@@ -84,8 +84,7 @@ d3.json("data/rajony.geojson", function(karta) {
     d3.csv("data/vidy_16.csv", function(groups) {
 
     // Таблица
-        //groups = groups;
-        
+
         tableSelection = groups.filter(function(d) {
 			return d.period == month && d.subgroup != "Всего";
 			});
@@ -123,7 +122,8 @@ d3.json("data/rajony.geojson", function(karta) {
 
 
     var selection = data.filter(selectData).sort(function(a, b) {
-    return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))});
+								return d3.ascending(parseFloat(a.amount), parseFloat(b.amount))
+    });
    
     var svodka = d3.select("#svodka")
 					.append("svg")
@@ -132,7 +132,6 @@ d3.json("data/rajony.geojson", function(karta) {
 						height: height / 1.8
 						});
     var svodkaSelection = selection.filter(selectSvodka)
-    
     
     var min = selection[0], max = selection[selection.length - 1];
     max.max = "max";
